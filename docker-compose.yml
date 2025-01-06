@@ -1,0 +1,35 @@
+networks:
+  my-network:
+    driver: bridge
+
+services:
+  eureka-server:
+    build:
+      context: ./eureka-server
+      dockerfile: Dockerfile
+    ports:
+      - "8761:8761"
+    networks:
+      - my-network
+
+  library2:
+    build:
+      context: ./library2
+      dockerfile: Dockerfile
+    environment:
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
+    depends_on:
+      - eureka-server
+    networks:
+      - my-network
+
+  book-service:
+    build:
+      context: ./book-service
+      dockerfile: Dockerfile
+    environment:
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
+    depends_on:
+      - eureka-server
+    networks:
+      - my-network
