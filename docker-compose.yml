@@ -18,18 +18,50 @@ services:
       dockerfile: Dockerfile
     environment:
       - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/postgres
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=arinemiller22
+      - SPRING_APPLICATION_NAME=library2
     depends_on:
       - eureka-server
+      - postgres
+    ports:
+      - "8081:8081"
     networks:
       - my-network
 
-  book-service:
+  books-service:
     build:
       context: ./book-service
       dockerfile: Dockerfile
     environment:
       - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/postgres
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=arinemiller22
+      - SPRING_APPLICATION_NAME=books-service
     depends_on:
       - eureka-server
+      - postgres
+    ports:
+      - "8082:8082"
+    networks:
+      - my-network
+
+  library-service:
+    build:
+      context: ./library-service
+      dockerfile: Dockerfile
+    environment:
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/postgres
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=arinemiller22
+      - SPRING_APPLICATION_NAME=library-service
+    depends_on:
+      - eureka-server
+      - postgres
+    ports:
+      - "8083:8083"
     networks:
       - my-network
